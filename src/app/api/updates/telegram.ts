@@ -5,16 +5,16 @@ import { Api } from "telegram/tl";
 //@ts-ignore
 import input from "input";
 
-const apiId = parseInt("29146226");
-const apiHash = "ebee06a79cee29551dd77efa3724cfcc";
-const monitoredGroupId = parseInt("-1002183645523"); // Grupo público com mensagens de bots
-const monitoredBotId = parseInt("7756548901"); // ID do bot que envia as mensagens
+const apiId = parseInt(process.env.API_ID || "0");
+const apiHash = process.env.API_HASH || "";
+const monitoredGroupId = parseInt(process.env.GROUP_ID || "0"); // Grupo público com mensagens de bots
+const monitoredBotId = parseInt(process.env.BOT_ID || "0"); // ID do bot que envia as mensagens
 
-const sessionString = "1AZWarzkBu6z0sFDhYeBVQdTBgIcpBnvXEcx2wEp8cT0argYGJ47NQfpfL-flQOXwg6kCASCxjLfdTlXXvj52F8q6ikQw36pBnsngh_6uigZmOSGmor6iuI6qg9vD3n0ARuWi_QU9Inex3lfkr7PojeqyaxM8rG_V8Ivt9XFPiEULrRkK61KTYNmJZzYfLGeJP5uJrrSKBl9gadH-7OcBYlp9hegq34Dl8qjXOkio-CiczBcfIJxoWU6JWNIh-GsfbSybjgzpcg1xO6EGZRb3zUXeds7KwKYp-sejN4_zrMLzh9HnRqlqDgPpwG1B-x-tF1O_NZMTfsUxAM7dT_QvdeqtelntWr8="; // String de sessão do usuário
-const saveSession = "1AQAOMTQ5LjE1NC4xNzUuNTcBu6z0sFDhYeBVQdTBgIcpBnvXEcx2wEp8cT0argYGJ47NQfpfL+flQOXwg6kCASCxjLfdTlXXvj52F8q6ikQw36pBnsngh/6uigZmOSGmor6iuI6qg9vD3n0ARuWi/QU9Inex3lfkr7PojeqyaxM8rG/V8Ivt9XFPiEULrRkK61KTYNmJZzYfLGeJP5uJrrSKBl9gadH+7OcBYlp9hegq34Dl8qjXOkio+CiczBcfIJxoWU6JWNIh+GsfbSybjgzpcg1xO6EGZRb3zUXeds7KwKYp+sejN4/zrMLzh9HnRqlqDgPpwG1B+x+tF1O/NZMTfsUxAM7dT/QvdeqtelntWr8="; // String de sessão do usuário
+const sessionString = process.env.SESSION_STRING; // String de sessão do usuário
+const saveSession = process.env.USER_SESSION; // String de sessão do usuário
 const client = new TelegramClient(new StringSession(saveSession ? saveSession : sessionString), apiId, apiHash, { connectionRetries: 5 });
 
-// Lista de tópicos que queremos monitorar
+// Lista de tópicos que queremos monitorar¸/* ¸ */
 const monitoredThreads = [
     237, 1017214, 816408, 105460, 1, 910, 816414, 106458, 137696
 ];
