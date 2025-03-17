@@ -5,6 +5,9 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 
+import styles from "./page.module.css";
+import Header from '../components/header/header';
+
 const queryClient = new QueryClient()
 
 export default function Page({
@@ -14,7 +17,10 @@ export default function Page({
 }>) {
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <Header/>
+      <main className={styles.main}>
+        {children}
+      </main>
     </QueryClientProvider>
   )
 }
