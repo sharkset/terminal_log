@@ -1,0 +1,22 @@
+.main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  
+  margin-top: 5rem;
+}
+
+.container {
+  height: calc(100vh - 5rem);
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem
+}
+
+.container button {
+  font-size: 1rem;
+  border: 1px solid #fed82c;
+}

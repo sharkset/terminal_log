@@ -1,0 +1,12 @@
+.connectButton {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: none;
+  color: #fed82c;
+
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}

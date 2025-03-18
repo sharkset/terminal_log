@@ -8,6 +8,8 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import Header from './components/header/header';
+import { SolanaWalletConnectors } from "@dynamic-labs/solana";
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 
 const queryClient = new QueryClient()
 
@@ -19,12 +21,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <QueryClientProvider client={queryClient}>
-      <Header/>
-      <main className={styles.main}>
-        {children}
-      </main>
-    </QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+          <DynamicContextProvider
+            settings={{
+              environmentId: process.env.DYNAMIC_ID ?? "",
+              walletConnectors: [SolanaWalletConnectors],
+            }}
+          >
+            <Header />
+            <main className={styles.main}>
+              {children}
+            </main>
+          </DynamicContextProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );

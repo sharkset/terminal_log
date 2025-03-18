@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     BOT_ID: process.env.BOT_ID,
     SESSION_STRING: process.env.SESSION_STRING,
     USER_SESSION: process.env.USER_SESSION,
+    DYNAMIC_ID: process.env.DYNAMIC_ID
   },
 };
 

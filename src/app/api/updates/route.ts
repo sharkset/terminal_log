@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { logs } from "../telegram";
+import { logs } from "./telegram";
 
 export async function GET() {
       try {

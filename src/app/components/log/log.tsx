@@ -5,11 +5,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 
-import styles from "./page.module.css";
+import styles from "./log.module.css";
 
 export default function Log() {
   const intervalMs = 1000;
-  const lastItemRef = useRef<HTMLDivElement>(null);
+  const lastItemRef = useRef<HTMLLIElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
 
   const { status, data, error } = useQuery({
