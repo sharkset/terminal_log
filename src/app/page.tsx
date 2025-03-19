@@ -1,16 +1,7 @@
-'use client';
+import Dashboard from './components/dashboard/dashboard';
 
-import { DynamicWidget } from "@dynamic-labs/sdk-react-core";
-import ConnectButton from "./components/connectButton/button";
-import styles from "./page.module.css";
-
-export default function Home() {
-  
+export default function HomePage() {
   return (
-      <div className={styles.page}>
-      Faça login
-      <ConnectButton/>
-      <DynamicWidget/>
-      </div>
+    <Dashboard/>
   );
 }
