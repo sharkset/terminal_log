@@ -4,6 +4,22 @@ import { Api } from "telegram/tl";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import input from "input";
+import { parseDefaiCreatorMessage, splitMessageByLineAndEntities } from "./parse";
+import dotenv from 'dotenv';
+dotenv.config();
+
+export type SectionItemRank = {
+    line1: string;
+    line2: string;
+    links: string[];
+  };
+  
+  export type SectionItemLine = {
+    line: string;
+    links: string[];
+  };
+  
+  export type SectionItem = SectionItemRank | SectionItemLine;
 
 const apiId = parseInt(process.env.API_ID || "0");
 const apiHash = process.env.API_HASH || "";
@@ -19,10 +35,43 @@ const monitoredThreads = [
     237, 1017214, 816408, 105460, 1, 910, 816414, 106458, 137696
 ];
 
+// IDs e configurações
+const defaiCreatorChannelId = -1002159053734;
+const defaiCreatorMsgIds = [13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+
 const MAX_LOGS = 1000;
 export const logs: string[] = [];
+export const msgParsed: Array<Record<string, SectionItem[]>> = [];
 
+async function fetchExistingDefaiCreatorMessages(client: TelegramClient) {
+    try {
+        // Busca as mensagens existentes no canal com os IDs especificados
+        const messages = await client.getMessages(defaiCreatorChannelId, {
+            ids: defaiCreatorMsgIds,
+        });
 
+        // Pode retornar menos itens se alguma mensagem não existir ou tiver sido deletada.
+        for (const msg of messages) {
+            if (msg && msg.message) {
+                splitMessageByLineAndEntities(
+                    msg.message,
+                    msg.entities
+                );
+
+                /* for (const [idx, lineObj] of linesWithLinks.entries()) {
+                    console.log(`Linha #${idx}:`, lineObj.text);
+                    console.log(`   Links:`, lineObj.links);
+                } */
+
+                const parsed = parseDefaiCreatorMessage(msg.message, msg.entities);
+                msgParsed.push(parsed);
+                //console.log("Resultado parseado:", msgParsed);
+            }
+        }
+    } catch (err) {
+        console.error("Erro ao buscar mensagens existentes:", err);
+    }
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function customLog(...args: any[]) {
@@ -43,35 +92,34 @@ function generateFakeLogs() {
         const actions = ["Initializing", "Processing", "Validating", "Executing", "Scanning", "Updating", "Loading", "Checking", "Retrieving", "Connecting"];
         const subjects = ["database", "network", "user session", "API request", "security module", "disk storage", "configuration", "authentication", "logs", "server instance"];
         const results = ["completed successfully.", "encountered an issue!", "is taking longer than expected.", "requires manual intervention.", "was interrupted.", "is now online.", "failed to respond.", "is running optimally.", "detected an anomaly.", "needs a restart.",
-            "Scanning brand new tokens on $SOL",
-            "Scanning brand new tokens on $ETH",
-            "Scanning brand new tokens on $BASE",
-            "Scanning brand new tokens on $TON",
-            "Creating patterns for low-performance tokens",
-            "Eliminating patterns for low-performance tokens (2x-)",
-            "Creating patterns for medium-performance tokens (2x+)",
-            "Creating patterns for high-performance tokens (10x+), Updating machine learning filters for Seekai Research",
-            "Updating machine learning filters for Seekai Gamble",
-            "New user clicked on the @defaicreator bot",
-            "New filter created – DEFAI agent created by a user, monitoring patterns and performance",
-            "New filter created by a user reached medium-performance token metrics, archiving filter for machine learning training",
-            "DEFAI agent created by user is only monitoring new token pairs",
-            "DEFAI agent created by user is now monitoring brand-new tokens only",
-            "DEFAI agent created by user is now monitoring brand-new tokens + called tokens only",
-            "DEFAI agent created by user is now monitoring only new $SOL tokens",
-            "DEFAI agent created by user is now monitoring only new $TON tokens",
-            "User's DEFAI agent is active on the $SOL network",
-            "User's DEFAI agent now ignores this network: $ETH",
-            "User named a DEFAI agent: XYZ",
-            "A new DEFAI agent was created by user X",
-            "DEFAI agent created by user is active in $SOL network",
-            "DEFAI agent created by user is active in $ETH network",
-            "DEFAI agent created by user is active in $BASE network",
-            "DEFAI agent created by user is active in $TRON network",
-            "DEFAI agent created by user is active in $TON network",
-            "Creating a new bundle of Telegram channels to monitor",
-            "Creating a new bundle of Telegram channels to monitor (finding $TICKER + CA)",
-            "A new channel has been found and added to the waiting list"
+            /*  "Scanning brand new tokens on $SOL",
+             "Scanning brand new tokens on $ETH",
+             "Scanning brand new tokens on $BASE",
+             "Scanning brand new tokens on $TON",
+             "Scanning brand new tokens on $TON",
+             "Creating patterns for low-performance tokens",
+             "Eliminating patterns for low-performance tokens (2x-)",
+             "Creating patterns for medium-performance tokens (2x+)",
+             "Creating patterns for high-performance tokens (10x+)",
+             "Updating machine learning filters for Seekai Research",
+             "Updating machine learning filters for Seekai Gamble",
+             "New user clicked on the @defaicreator bot",
+             "New DEFAI agent created by a user, monitoring filters patterns and performance",
+             "New filter created by a user reached medium-performance token metrics, archiving filter for machine learning training",
+             "DEFAI agent created by user is only monitoring new token pairs",
+             "DEFAI agent created by user is now monitoring brand-new tokens only",
+             "DEFAI agent created by user is now monitoring brand-new tokens + called tokens only",
+             "DEFAI agent created by user is active in $SOL network",
+             "DEFAI agent created by user is active in $ETH network",
+             "DEFAI agent created by user is active in $BASE network",
+             "DEFAI agent created by user is active in $TRON network",
+             "DEFAI agent created by user is active in $TON network",
+             "DEFAI agent created by user now ignores $SOL network",
+             "DEFAI agent created by user now ignores $TON network",
+             "DEFAI agent created by user now ignores $ETH network",
+             "DEFAI agent created by user now ignores $BASE network",
+             "Creating a new bundle of Telegram channels to monitor",
+             "Creating a new bundle of Telegram channels to monitor (finding $TICKER + CA)" */
         ];
 
         return `${getRandomElement(actions)} ${getRandomElement(subjects)} ${getRandomElement(results)}`;
@@ -95,9 +143,22 @@ function extractInfo(text: string): string {
         return "API Generated Warning, remove this...";
     }
 
+    const signalRegex = /(?:SOL|BSC|ETH|TON|TRON|SUI) Signal\s*💬\s*(.*?)\s*\n.*\n([a-zA-Z0-9]+)\s*\n📊 Chart/;
+    const callAlertRegex = /(.*just passed \d+x!)/;
+
+    let match = text.match(signalRegex);
+    if (match) {
+        return `Signal: ${match[1]}, Token: ${match[2]}`;
+    }
+
+    match = text.match(callAlertRegex);
+    if (match) {
+        return match[1]; // Retorna apenas a primeira linha com "just passed"
+    }
+
     const callerMatch = text.match(/(?<=💬 )(\w+)/);
     if (callerMatch) {
-        return `Caller: ${callerMatch[1]}`;
+        return `Generating call of: ${callerMatch[1]}`;
     }
 
     const agentMatch = text.match(/(?<=🚦 )(\w+-?\w*)/);
@@ -184,7 +245,7 @@ async function start() {
 
                 //console.log("🔍 Mensagem Recebida:", message);
                 const extractedInfo = extractInfo(text);
-                customLog(`[${timestamp}] [IA] ${extractedInfo}`);
+                customLog(`[${timestamp}] [IA] 🤖 ${extractedInfo}`);
             }
 
             if (message.peerId instanceof Api.PeerChannel && "-100" + message.peerId.channelId.toString() === monitoredGroupId.toString()) {
@@ -201,13 +262,68 @@ async function start() {
                     //console.log("🔍 Mensagem Recebida:", message);
 
 
-                    customLog(`[${timestamp}] [IA] ${extractedInfo}`);
+                    customLog(`[${timestamp}] [IA] 🤖 ${extractedInfo}`);
                 }
             }
         }
     });
 
     console.log(`✅ Agora monitorando mensagens nos subchats: ${monitoredThreads.join(", ")} do grupo ${monitoredGroupId}.`);
+    await fetchExistingDefaiCreatorMessages(client);
+
+    monitorDefaiCreatorChannel(client);
+
+    console.log("✅ Monitorando canal DefaiCreator e subchats do grupo ao mesmo tempo!");
+}
+
+// Função que inicia o “escuta” de mensagens no canal -1002159053734
+export function monitorDefaiCreatorChannel(client: TelegramClient) {
+    client.addEventHandler(async (update) => {
+        // Mensagem nova no canal
+        if (update instanceof Api.UpdateNewChannelMessage) {
+            const message = update.message as Api.Message;
+            if (isDefaiCreatorTargetMessage(message)) {
+                const parsedResult = parseDefaiCreatorMessage(
+                    message.message || "",
+                    message.entities
+                );
+                msgParsed.push(parsedResult);
+                console.log(
+                    "Mensagem NOVA do canal DefaiCreator parseada:",
+                    parsedResult
+                );
+            }
+        }
+        // Mensagem editada no canal
+        else if (update instanceof Api.UpdateEditChannelMessage) {
+            const message = update.message as Api.Message;
+            if (isDefaiCreatorTargetMessage(message)) {
+                const parsedResult = parseDefaiCreatorMessage(
+                    message.message || "",
+                    message.entities
+                );
+                msgParsed.push(parsedResult);
+                console.log(
+                    "Mensagem EDITADA do canal DefaiCreator parseada:",
+                    parsedResult
+                );
+            }
+        }
+    });
+}
+
+// Verifica se a mensagem vem do canal correto e se o message_id está na lista
+function isDefaiCreatorTargetMessage(message: Api.Message) {
+    if (!(message.peerId instanceof Api.PeerChannel)) return false;
+
+    // -100 + channelId = ID completo do canal no Telegram
+    const fullChannelId = "-100" + message.peerId.channelId.toString();
+    if (fullChannelId !== defaiCreatorChannelId.toString()) return false;
+
+    // Verifica se o message_id está na lista que queremos
+    if (!defaiCreatorMsgIds.includes(message.id)) return false;
+
+    return true;
 }
 
 start();
