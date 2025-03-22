@@ -1,0 +1,32 @@
+.tooltipContainer {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltipText {
+  position: absolute;
+  bottom: -120%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  background-color: #0a0a0a;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: 0 3px 3px rgba(222, 222, 222, 0.1);
+  font-size: 0.85rem;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+
+  @media(max-width: 768px) {
+    max-width: 20px;
+  }
+}
+
+.active {
+  opacity: 1;
+  z-index: 1;
+}
+

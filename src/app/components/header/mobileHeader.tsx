@@ -1,10 +1,11 @@
-
 import Image from "next/image";
-import styles from "./header.module.css";
-import Link from "next/link";
 import { Menu } from "lucide-react";
 import { useState } from "react";
+
+import styles from "./header.module.css";
+
 import ConnectButton from "../connectButton/button";
+import NavigationLinks from "./navigationLinks";
 
 
 export default function MobileHeader() {
@@ -20,8 +21,7 @@ export default function MobileHeader() {
           <nav>
             <button onClick={() => handleToggleMenu()}><Menu/></button>
             <div className={`${styles.mobileSubmenu} ${isOpenedMenu ? styles.opened : styles.closed }`}>
-              <Link href='/terminal'>TERMINAL</Link>
-              <Link href='/'>DASHBOARD</Link>
+              <NavigationLinks/>
               <ConnectButton/>
             </div>
           </nav>

@@ -1,0 +1,22 @@
+.dashboardContainer {
+  width: 100%;
+  max-width: 1455px;
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0.85rem;
+
+  margin-top: 2rem;
+}
+
+.dashboard {
+  padding-top: 1rem;
+
+  h3 {
+    font-size: 1.2rem;
+    color: #fed82c;
+
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+  }
+}

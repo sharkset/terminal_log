@@ -4,8 +4,6 @@ import styles from "./button.module.css";
 export default function ConnectButton() {
   const { setShowAuthFlow, primaryWallet } = useDynamicContext();
 
-  console.log('primaryWallet: ', primaryWallet?.address)
-
   function condenseAddress(address: string | undefined) {
     if (!address) {
       return null;

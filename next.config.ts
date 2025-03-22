@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     USER_SESSION: process.env.USER_SESSION,
     DYNAMIC_ID: process.env.DYNAMIC_ID
   },
+  images: {
+    domains: ['dd.dexscreener.com'],
+  },
 };
 
 export default nextConfig;
