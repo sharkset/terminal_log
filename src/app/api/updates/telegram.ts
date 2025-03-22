@@ -4,22 +4,9 @@ import { Api } from "telegram/tl";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import input from "input";
-import { parseDefaiCreatorMessage, splitMessageByLineAndEntities } from "./parse";
+import { parseDefaiCreatorMessage, SectionItem, splitMessageByLineAndEntities } from "./parse";
 import dotenv from 'dotenv';
 dotenv.config();
-
-export type SectionItemRank = {
-    line1: string;
-    line2: string;
-    links: string[];
-  };
-  
-  export type SectionItemLine = {
-    line: string;
-    links: string[];
-  };
-  
-  export type SectionItem = SectionItemRank | SectionItemLine;
 
 const apiId = parseInt(process.env.API_ID || "0");
 const apiHash = process.env.API_HASH || "";
@@ -63,7 +50,7 @@ async function fetchExistingDefaiCreatorMessages(client: TelegramClient) {
                     console.log(`   Links:`, lineObj.links);
                 } */
 
-                const parsed = parseDefaiCreatorMessage(msg.message, msg.entities);
+                const parsed = await parseDefaiCreatorMessage(client, msg.message, msg.entities);
                 msgParsed.push(parsed);
                 //console.log("Resultado parseado:", msgParsed);
             }
@@ -271,19 +258,21 @@ async function start() {
     console.log(`✅ Agora monitorando mensagens nos subchats: ${monitoredThreads.join(", ")} do grupo ${monitoredGroupId}.`);
     await fetchExistingDefaiCreatorMessages(client);
 
-    monitorDefaiCreatorChannel(client);
+    await monitorDefaiCreatorChannel(client);
 
     console.log("✅ Monitorando canal DefaiCreator e subchats do grupo ao mesmo tempo!");
+
 }
 
 // Função que inicia o “escuta” de mensagens no canal -1002159053734
-export function monitorDefaiCreatorChannel(client: TelegramClient) {
+async function monitorDefaiCreatorChannel(client: TelegramClient) {
     client.addEventHandler(async (update) => {
         // Mensagem nova no canal
         if (update instanceof Api.UpdateNewChannelMessage) {
             const message = update.message as Api.Message;
             if (isDefaiCreatorTargetMessage(message)) {
-                const parsedResult = parseDefaiCreatorMessage(
+                const parsedResult = await parseDefaiCreatorMessage(
+                    client,
                     message.message || "",
                     message.entities
                 );
@@ -298,7 +287,8 @@ export function monitorDefaiCreatorChannel(client: TelegramClient) {
         else if (update instanceof Api.UpdateEditChannelMessage) {
             const message = update.message as Api.Message;
             if (isDefaiCreatorTargetMessage(message)) {
-                const parsedResult = parseDefaiCreatorMessage(
+                const parsedResult = await parseDefaiCreatorMessage(
+                    client,
                     message.message || "",
                     message.entities
                 );
