@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { msgParsed } from "../updates/telegram";
 
+
 export async function GET() {
       try {
           return NextResponse.json(msgParsed)

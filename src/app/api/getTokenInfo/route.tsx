@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const response = await axios.get(url)
-    return NextResponse.json(response.data.pairs[0])
+    return NextResponse.json(response?.data?.pairs?.[0])
   } catch (error) {
     NextResponse.error();
     console.error('Failed get token info', error);
