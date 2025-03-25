@@ -262,6 +262,8 @@ async function start() {
 
     console.log("✅ Monitorando canal DefaiCreator e subchats do grupo ao mesmo tempo!");
 
+    //console.log("Logs gerados:", JSON.stringify(msgParsed));
+
 }
 
 // Função que inicia o “escuta” de mensagens no canal -1002159053734
@@ -277,10 +279,10 @@ async function monitorDefaiCreatorChannel(client: TelegramClient) {
                     message.entities
                 );
                 msgParsed.push(parsedResult);
-                console.log(
+               /*  console.log(
                     "Mensagem NOVA do canal DefaiCreator parseada:",
                     parsedResult
-                );
+                ); */
             }
         }
         // Mensagem editada no canal
@@ -293,10 +295,10 @@ async function monitorDefaiCreatorChannel(client: TelegramClient) {
                     message.entities
                 );
                 msgParsed.push(parsedResult);
-                console.log(
+                /* console.log(
                     "Mensagem EDITADA do canal DefaiCreator parseada:",
                     parsedResult
-                );
+                ); */
             }
         }
     });
@@ -318,3 +320,4 @@ function isDefaiCreatorTargetMessage(message: Api.Message) {
 
 start();
 generateFakeLogs();
+//

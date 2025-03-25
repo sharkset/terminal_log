@@ -31,3 +31,5 @@ export async function uploadImageToImgur(imageBuffer: Buffer): Promise<string> {
 
   throw new Error("Falha ao fazer upload da imagem para o Imgur");
 }
+
+//
