@@ -41,7 +41,7 @@ export default function Dashboard() {
   const [selectedLists, setSelectedLists] = useState({
     1: {index: 0, name: "Trending Tokens"},
     2: {index: 1, name: "Latest Calls"},
-    3: {index: 6, name: "Best Calls of Last Month"}
+    3: {index: 5, name: "Best Calls of Last Month"}
   });
 
   const { status, data, error } = useQuery({

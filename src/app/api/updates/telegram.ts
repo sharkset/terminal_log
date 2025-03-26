@@ -248,7 +248,6 @@ async function start() {
 
                     //console.log("🔍 Mensagem Recebida:", message);
 
-
                     customLog(`[${timestamp}] [IA] 🤖 ${extractedInfo}`);
                 }
             }
