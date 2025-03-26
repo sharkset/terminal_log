@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+//import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { formatDistanceStrict } from 'date-fns';
 import { TZDate } from '@date-fns/tz';
 import { ChartArea, CircleDollarSign, Goal } from 'lucide-react';
@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { Skeleton } from '@/components/ui/skeleton';
+//import { Skeleton } from '@/components/ui/skeleton';
 
 
 interface DashboardItemProps {
@@ -131,6 +131,7 @@ const timeRegex = /⏳\s*([\d/:\s]+)/;
 const symbolRegex = /\$(\w+)/;
 const multiplierRegex = /🎯(\d+x)/;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function DashboardBestCalls({ line1, line2, line3, links, position }: DashboardItemProps) {
 
   const address = links[0].match(addressRegex)?.[1];
