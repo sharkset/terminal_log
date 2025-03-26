@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { msgParsed } from "../updates/telegram";
-
-/* const msgParsed = [
+/* 
+const msgParsed = [
     {
         "Trending Tokens": [
             {
@@ -12,7 +12,7 @@ import { msgParsed } from "../updates/telegram";
                 ]
             },
             {
-                "line": "📞 31  $GHIBLI",
+                "line": "📞 31  $GHIBLI 🔥 2",
                 "links": [
                     "https://t.me/defaicreatorbot?start=t_4TBi66vi32S7J8X1A6eWfaLHYmUXu7CStcEmsJQdpump",
                     "https://t.me/defaicreatorbot?start=t_8GU553YS3UjPRXsTdRTfQGRyVQznRoDgXKCL8si7pump"
@@ -832,7 +832,8 @@ import { msgParsed } from "../updates/telegram";
     {
 
     }
-] */
+] 
+ */
 
 export async function GET() {
     try {

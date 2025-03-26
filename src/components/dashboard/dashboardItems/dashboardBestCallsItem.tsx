@@ -144,6 +144,8 @@ export default function DashboardBestCalls({ line1, line2, line3, links, positio
   const { data } = useQuery({
     queryKey: ['tokenInfo', address],
     queryFn: async (): Promise<DescreenerTokenIfo> => {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       const response = await axios.get(`/api/getTokenInfo?address=${address}`);
       return await response.data;
     },
@@ -177,14 +179,14 @@ export default function DashboardBestCalls({ line1, line2, line3, links, positio
       </Avatar>
       <div className="grid grid-rows-3 grow">
         <div className="flex items-center justify-between grow">
-          <a href={links[1]} className="inline-flex items-center">
+          <a href={links[1]} target="_blank" className="inline-flex items-center">
             <h5 className="text-xs font-bold">{name}</h5>
             <h4 className="text-xs font-normal ml-1.5">${symbol}</h4>
           </a>
           <span className="text-xs text-primary mr-[3px]">
             {usersAmount}<FontAwesomeIcon icon={faUsers} fontSize={12} className="ml-[3px]" />
           </span>
-          <a className="bg-none border-none text-xs flex items-center justify-end cursor-pointer text-right" href={`https://t.me/MaestroSniperBot?start=${address}-frankgumbou`}>
+          <a target="_blank" className="bg-none border-none text-xs flex items-center justify-end cursor-pointer text-right" href={`https://t.me/MaestroSniperBot?start=${address}-frankgumbou`}>
             Buy <CircleDollarSign size={16} color="var(--primary)" />
           </a>
         </div>
@@ -195,7 +197,7 @@ export default function DashboardBestCalls({ line1, line2, line3, links, positio
               <FontAwesomeIcon icon={faClone} />
             </button>
           </p>
-          <a href={links[2]} className="text-xs font-normal">
+          <a target="_blank" href={links[2]} className="text-xs font-normal">
             by {by}
           </a>
         </div>
@@ -203,21 +205,21 @@ export default function DashboardBestCalls({ line1, line2, line3, links, positio
           <div className="flex items-center gap-1">
             <p className='text-xs text-foreground font-normal flex items-center'><FontAwesomeIcon icon={faHourglassHalf} fontSize={12} className="text-foreground mr-[3px]" /> {timePassed}</p>
             {socials?.map(({ type, url }, index) => (
-              <a
+              <a target="_blank"
                 key={index}
                 href={url}
               >
                 {getSocialIcons(type)}
               </a>
             ))}
-            <a className="bg-none inline border-none text-xs" href={chartLink}>
+            <a target="_blank" className="bg-none inline border-none text-xs" href={chartLink}>
               <ChartArea size={16} color="var(--primary)" />
             </a>
           </div>
           <div className="mb-[0.35rem] gap-[3px] w-full inline-flex items-center justify-end">
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild><p className="text-xs font-normal flex items-center"><Goal size={12} className="ml-[3px]" /> {multiplierAmount} </p></TooltipTrigger>
+                <TooltipTrigger asChild><p className="text-xs font-normal flex items-center text-[#6dfb02]"><Goal size={12} className="ml-[3px]" /> {multiplierAmount} </p></TooltipTrigger>
                 <TooltipContent>
                   <p className="text-black">Sorted by median ATH X at least 4 calls or more</p>
                 </TooltipContent>

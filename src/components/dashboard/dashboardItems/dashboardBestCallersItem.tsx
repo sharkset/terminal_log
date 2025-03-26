@@ -45,7 +45,7 @@ export default function DashboardBestCallersItem({ line, links, position }: Dash
           <span className="gap-[3px] inline-flex items-center">
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild><p className="text-xs font-normal flex items-center"><Goal size={12} className="ml-[3px]" /> {multiplierAmount} </p></TooltipTrigger>
+                <TooltipTrigger asChild><p className="text-xs font-normal flex items-center text-[#6dfb02]"><Goal size={12} className="ml-[3px]" /> {multiplierAmount} </p></TooltipTrigger>
                 <TooltipContent>
                   <p className="text-black">Sorted by median ATH X at least 4 calls or more</p>
                 </TooltipContent>
