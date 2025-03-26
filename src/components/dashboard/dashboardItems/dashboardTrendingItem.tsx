@@ -80,19 +80,19 @@ const condenseBigValues = (value: number | undefined): string => {
 const getSocialIcons = (type: string) => {
   switch (type) {
     case 'twitter':
-      return <FontAwesomeIcon icon={faXTwitter} fontSize={12} className="ml-[3px]" />;
+      return <FontAwesomeIcon icon={faXTwitter} fontSize={12} />;
     case 'discord':
-      return <FontAwesomeIcon icon={faDiscord} fontSize={12} className="ml-[3px]" />;
+      return <FontAwesomeIcon icon={faDiscord} fontSize={12} />;
     case 'instagram':
-      return <FontAwesomeIcon icon={faInstagram} fontSize={12} className="ml-[3px]" />;
+      return <FontAwesomeIcon icon={faInstagram} fontSize={12} />;
     case 'facebook':
-      return <FontAwesomeIcon icon={faFacebook} fontSize={12} className="ml-[3px]" />;
+      return <FontAwesomeIcon icon={faFacebook} fontSize={12} />;
     case 'youtube':
-      return <FontAwesomeIcon icon={faYoutube} fontSize={12} className="ml-[3px]" />;
+      return <FontAwesomeIcon icon={faYoutube} fontSize={12} />;
     case 'telegram':
-      return <FontAwesomeIcon icon={faTelegram} fontSize={12} className="ml-[3px]" />;
+      return <FontAwesomeIcon icon={faTelegram} fontSize={12} />;
     default:
-      return <FontAwesomeIcon icon={faShareFromSquare} fontSize={12} className="ml-[3px]" />;
+      return <FontAwesomeIcon icon={faShareFromSquare} fontSize={12} />;
   }
 }
 
@@ -121,15 +121,10 @@ export default function DashboardTrendingItem({ line, links, position }: Dashboa
   const chartLink = data?.url;
   const avatarUrl = data?.info?.imageUrl ?? "/avatar.jpg";
 
-  const isTopPositions = position === 1 || position === 2 || position === 3;
-  const baseItemClass = "border-t px-8 py-4 max-w-screen";
-  const regularItemClass = baseItemClass + " bg-black border-[hsl(224,19%,16%)]";
-  const highlightItemClass = baseItemClass + " bg-[#07281b] border-[#0a0a0a]";
-
   const copyAddressToClipboard = () => {
     navigator.clipboard.writeText(completeAddress || "")
-    .then(() => toast.success("Address copied to clipboard!"))
-    .catch(() => toast.error("Oops, there was an error trying to copy the address. Please try again later"));
+      .then(() => toast.success("Address copied to clipboard!"))
+      .catch(() => toast.error("Oops, there was an error trying to copy the address. Please try again later"));
   }
 
   if (status === 'error') return <span>Error: {error.message}</span>;
@@ -137,21 +132,20 @@ export default function DashboardTrendingItem({ line, links, position }: Dashboa
   const isLoading = status === 'pending';
 
   return (
-    <div className={isTopPositions ? highlightItemClass : regularItemClass}>
-      <header className="flex items-center gap-[0.55rem] m-[0.55rem]">
-        <span className="font-bold text-base px-1 py-[0.2rem] rounded-full text-primary">#{position}</span>
-        <Avatar>
-          <AvatarImage src={avatarUrl} />
-          <AvatarFallback className="bg-[url(/avatar.jpg)] text-secondary uppercase">{initials}</AvatarFallback>
-        </Avatar>
-        <div>
-          <span className="inline-flex items-center mb-[0.25rem]">
-            {!name && isLoading ? <Skeleton className="h-3 w-dvw mb-1" /> : <h5 className="text-sm font-bold">{name}</h5>}
-            {!name && isLoading ? <Skeleton className="h-3 w-15 mb-1" /> : <h4 className="text-sm font-normal ml-[0.35rem]">${symbol}</h4>}
+    <div className='flex items-center justify-between gap-2 p-2 bg-secondary not-first:border-t border-[hsl(224,19%,16%)]'>
+      <Avatar className="w-[50px] h-[50px]">
+        <AvatarImage src={avatarUrl} width={50} height={50} />
+        <AvatarFallback className="bg-[url(/avatar.jpg)] text-secondary uppercase">{initials}</AvatarFallback>
+      </Avatar>
+      <div className="grid grid-rows-3 grow">
+        <div className="flex items-center justify-between grow">
+          <span className="inline-flex items-center">
+            {!name && isLoading ? <Skeleton className="h-3 w-30" /> : <h5 className="text-xs font-bold">{name}</h5>}
+            {!name && isLoading ? <Skeleton className="h-3 w-15" /> : <h4 className="text-xs font-normal ml-1.5">${symbol}</h4>}
             {uniqueCallsAmount &&
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild><h4 className="text-sm font-normal ml-[0.35rem]">
+                  <TooltipTrigger asChild><h4 className="text-xs font-normal ml-[0.35rem]">
                     {uniqueCallsAmount}
                   </h4></TooltipTrigger>
                   <TooltipContent>
@@ -161,52 +155,51 @@ export default function DashboardTrendingItem({ line, links, position }: Dashboa
               </TooltipProvider>
             }
           </span>
+          <a className="bg-none border-none text-xs flex items-center justify-end cursor-pointer text-right" href={`https://t.me/MaestroSniperBot?start=${address}-frankgumbou`}>
+            Buy <CircleDollarSign size={16} color="var(--primary)" />
+          </a>
+        </div>
+        <div className="flex items-center justify-between grow">
           <p className="text-xs font-normal">
             {condensedAddress ?? condenseAddress(address)}
-            <button onClick={copyAddressToClipboard} className="bg-none border-none cursor-pointer ml-[0.35rem]">
+            <button onClick={copyAddressToClipboard} className="bg-none border-none cursor-pointer ml-1.5">
               <FontAwesomeIcon icon={faClone} />
             </button>
           </p>
         </div>
-      </header>
-      <div className="mb-[0.35rem] gap-[3px] w-full inline-flex items-center justify-end">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild><p className="text-xs text-foreground font-normal flex items-center">
-              <Phone size={10} className="ml-[3px]" />
-              {callsAmount}
-            </p></TooltipTrigger>
-            <TooltipContent>
-              <p className="text-black">Unique calls in the last 24 hours</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        {(!volume || !marketCap) && isLoading ? <Skeleton className="h-3 w-15 mb-1" /> : <p className="text-xs text-foreground font-normal">V${volume} MC${marketCap}</p>}
-      </div>
-      <div className="flex items-center justify-between">
-        <div>
-          {socials?.map(({ type, url }, index) => (
-            <a
-              key={index}
-              href={url}
-            >
-              {getSocialIcons(type)}
+        <div className="flex items-center justify-between grow">
+          <div className="flex items-center gap-1">
+            {socials?.map(({ type, url }, index) => (
+              <a
+                key={index}
+                href={url}
+              >
+                {getSocialIcons(type)}
+              </a>
+            ))}
+            <a className="bg-none inline border-none text-xs" href={chartLink}>
+              <ChartArea size={16} color="var(--primary)" />
             </a>
-          ))}
-        </div>
-        <div className="flex justify-end items-center gap-4">
-          <a className="bg-none border-none text-xs inline-flex items-center cursor-pointer" href={`https://t.me/MaestroSniperBot?start=${address}-frankgumbou`}>
-            Buy <CircleDollarSign size={16} color="var(--primary)" />
-          </a>
-          <a className="bg-none border-none text-xs inline-flex items-center cursor-pointer" href={chartLink}>
-            Chart <ChartArea size={16} color="var(--primary)"/>
-          </a>
-          <a className="bg-none border-none text-xs inline-flex items-center cursor-pointer" href={links[0]}>
-            Callers <PhoneCall size={16} color="var(--primary)"/>
-          </a>
+            <a className="bg-none inline border-none text-xs" href={links[0]}>
+              <PhoneCall size={16} color="var(--primary)" />
+            </a>
+          </div>
+          <div className="mb-[0.35rem] gap-[3px] w-full inline-flex items-center justify-end">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild><p className="text-xs text-foreground font-normal flex items-center">
+                  <Phone size={10} className="ml-[3px]" />
+                  {callsAmount}
+                </p></TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-black">Unique calls in the last 24 hours</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            {(!volume || !marketCap) ? <Skeleton className="h-3 w-15 mb-1" /> : <p className="text-xs text-foreground font-normal">V${volume} MC${marketCap}</p>}
+          </div>
         </div>
       </div>
-      <ReactQueryDevtools initialIsOpen />
     </div>
   );
 }

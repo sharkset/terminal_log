@@ -12,6 +12,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 interface DashboardItemProps {
   line: string
   links: string[]
+  line3: {
+    title: string,
+    username: string,
+    photo: string,
+    members: number
+  }
 }
 
 const getTimeFromNow = (time: string | undefined): string | null => {
@@ -26,7 +32,7 @@ const getTimeFromNow = (time: string | undefined): string | null => {
   return formatDistanceStrict(now, extractedDate);
 }
 
-export default function DashboardLatestCallsItem({ line, links }: DashboardItemProps) {
+export default function DashboardLatestCallsItem({ line, links, line3 }: DashboardItemProps) {
 
   const nameRegex = /\$(\w+)/;
   const byRegex = /by\s+(.*)/;
@@ -34,34 +40,39 @@ export default function DashboardLatestCallsItem({ line, links }: DashboardItemP
 
   const name = line.match(nameRegex)?.[1];
   const initials = name?.slice(0, 2);
-  const by = line.match(byRegex)?.[1];
+  const by = line3.title ?? line.match(byRegex)?.[1];
   const callTime = line.match(timeRegex)?.[1];
 
   const timePassed = getTimeFromNow(callTime);
-  //const usersAmount = 5;
+  const usersAmount = line3?.members ?? "--";
+  const avatarUrl = line3?.photo;
 
   return (
-    <div className="bg-black border-t border-[hsl(224,19%,16%)] px-8 py-4">
-      <header className="flex items-center gap-[0.55rem] m-[0.55rem]">
-        <Avatar>
-          <AvatarImage src="#" />
-          <AvatarFallback className="bg-[url(/avatar.jpg)] text-secondary uppercase">{initials}</AvatarFallback>
-        </Avatar>
-        <div>
-          <h5 className="text-sm font-bold">
-            $ {name}
-          </h5>
+    <div className='flex items-center justify-between gap-2 p-2 bg-secondary not-first:border-t border-[hsl(224,19%,16%)]'>
+      <Avatar className="w-[50px] h-[50px]">
+        <AvatarImage src={`./uploads/${avatarUrl}`} width={50} height={50} />
+        <AvatarFallback className="bg-[url(/avatar.jpg)] text-secondary uppercase">{initials}</AvatarFallback>
+      </Avatar>
+      <div className="grid grid-rows-3 grow gap-2">
+        <div className="flex items-center justify-between grow">
+          <span className="inline-flex items-center">
+            <h5 className="text-xs font-bold">{name}</h5>
+          </span>
+          <p className="text-xs"><FontAwesomeIcon icon={faUsers} fontSize={12} className="ml-[3px] text-primary"/> {usersAmount}</p>
+        </div>
+        <div className="flex items-center justify-between grow">
           <a href={links[0]} className="text-xs font-normal">
             by {by}
           </a>
         </div>
-      </header>
-      <div className="flex items-center justify-between">
-        <p className="text-xs">
-          <FontAwesomeIcon icon={faHourglassHalf} fontSize={12} className="ml-[3px]"/> {timePassed}
-        </p>
-       {/*  <p className="text-xs text-primary"><FontAwesomeIcon icon={faUsers} fontSize={12} className="ml-[3px]"/> {usersAmount}</p> */}
+        <div className="flex items-center justify-between grow">
+          <div className="flex items-center gap-1">
+            <p className="text-xs">
+            <FontAwesomeIcon icon={faHourglassHalf} fontSize={12} className="ml-[3px] text-primary" /> {timePassed}
+          </p>
+          </div>
+        </div>
       </div>
     </div>
-  );
+  )
 }

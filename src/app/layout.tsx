@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-neutral-900">
+      <body className="bg-background">
         <QueryClientProvider client={queryClient}>
           <DynamicContextProvider
             settings={{

@@ -29,7 +29,7 @@ export default function DashboardItemDistibuter({ line, line1, line2, line3, lin
   const line3Empty = {title: "", username: "", photo: "", members: 0};
 
   if (context === "Trending Tokens") return <DashboardTrendingItem line={line ?? ""} links={links} position={position} />
-  if (context === "Latest Calls") return <DashboardLatestCallsItem line={line ?? ""} links={links} />
+  if (context === "Latest Calls") return <DashboardLatestCallsItem line={line ?? ""} links={links} line3={line3 ?? line3Empty}/>
   if (context === "Best Callers of Last Month") return <DashboardBestCallersItem line={line1 ?? ""} links={links} position={position} />
   if (context === "Best Callers of Last Week") return <DashboardBestCallersItem line={line1 ?? ""} links={links} position={position} />
   if (context === "Best Callers of Last 24 Hours") return <DashboardBestCallersItem line={line1 ?? ""} links={links} position={position} />

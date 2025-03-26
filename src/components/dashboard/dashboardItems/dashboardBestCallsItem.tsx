@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 interface DashboardItemProps {
@@ -102,9 +103,26 @@ const getTimeFromNow = (time: string | undefined): string | null => {
   const fullYear = year < 100 ? 2000 + year : year;
 
   const extractedDate = new Date(fullYear, month - 1, day, hours, minutes, seconds);
+  const timeFromNow = formatDistanceStrict(now, extractedDate);
 
-  return formatDistanceStrict(now, extractedDate);
+  return condenseTime(timeFromNow);
 }
+
+const condenseTime = (input: string): string => {
+  const units: Record<string, string> = {
+    hours: 'h',
+    hour: 'h',
+    minutes: 'm',
+    minute: 'm',
+    seconds: 's',
+    second: 's',
+  };
+
+  const [value, unit] = input.split(' ');
+
+  return `${value}${units[unit] || ''}`;
+}
+
 
 const addressRegex = /\/([^\/]+)$/;
 const marketcapRegex = /📞\s*(\$\d+(\.\d+)?[kmb]?)/i;
@@ -122,7 +140,7 @@ export default function DashboardBestCalls({ line1, line2, line3, links, positio
   const marketCap = line2.match(marketcapRegex)?.[1];
   const volume = line2.match(volumeRegex)?.[1];
   const time = line2.match(timeRegex)?.[1];
-  const timePassed = getTimeFromNow(time); 
+  const timePassed = getTimeFromNow(time);
 
   const { data } = useQuery({
     queryKey: ['tokenInfo', address],
@@ -134,11 +152,6 @@ export default function DashboardBestCalls({ line1, line2, line3, links, positio
 
   const socials = data?.info?.socials ?? [];
   const completeAddress = data?.baseToken?.address ?? address;
-
-  const isTopPositions = position === 1 || position === 2 || position === 3;
-  const baseItemClass = "border-t px-8 py-4 max-w-screen";
-  const regularItemClass = baseItemClass + " bg-black border-[hsl(224,19%,16%)]";
-  const highlightItemClass = baseItemClass + " bg-[#07281b] border-[#0a0a0a]";
 
   const copyAddressToClipboard = () => {
     navigator.clipboard.writeText(completeAddress || "")
@@ -158,63 +171,64 @@ export default function DashboardBestCalls({ line1, line2, line3, links, positio
 
 
   return (
-    <div className={isTopPositions ? highlightItemClass : regularItemClass}>
-      <header className="flex items-center gap-[0.55rem] m-[0.55rem] relative">
-        <span className="font-bold text-base px-1 py-[0.2rem] rounded-full text-primary">#{position}</span>
-        <Avatar>
-          <AvatarImage src={`./uploads/${avatarUrl}`} />
-          <AvatarFallback className="bg-[url(/avatar.jpg)] text-secondary uppercase">{initials}</AvatarFallback>
-        </Avatar>
-        <div>
-          <a href={links[1]} className="inline-flex items-center mb-[0.25rem]">
-            <h5 className="text-sm font-bold">{name}</h5>
-            <h4 className="text-sm font-normal ml-[0.35rem]">${symbol}</h4>
+    <div className='flex items-center justify-between gap-2 p-2 bg-secondary not-first:border-t border-[hsl(224,19%,16%)]'>
+      <Avatar className="w-[50px] h-[50px]">
+        <AvatarImage src={`./uploads/${avatarUrl}`} width={50} height={50} />
+        <AvatarFallback className="bg-[url(/avatar.jpg)] text-secondary uppercase">{initials}</AvatarFallback>
+      </Avatar>
+      <div className="grid grid-rows-3 grow">
+        <div className="flex items-center justify-between grow">
+          <a href={links[1]} className="inline-flex items-center">
+            <h5 className="text-xs font-bold">{name}</h5>
+            <h4 className="text-xs font-normal ml-1.5">${symbol}</h4>
           </a>
-          <a href={links[2]} className="text-xs font-normal block mb-[0.25rem]">
-            by {by}
+          <span className="text-xs text-primary mr-[3px]">
+            {usersAmount}<FontAwesomeIcon icon={faUsers} fontSize={12} className="ml-[3px]" />
+          </span>
+          <a className="bg-none border-none text-xs flex items-center justify-end cursor-pointer text-right" href={`https://t.me/MaestroSniperBot?start=${address}-frankgumbou`}>
+            Buy <CircleDollarSign size={16} color="var(--primary)" />
           </a>
+        </div>
+        <div className="flex items-center justify-between grow">
           <p className="text-xs font-normal">
-            {condensedAddress}
-            <button onClick={copyAddressToClipboard} className="bg-none border-none cursor-pointer ml-[0.35rem]">
+            {condensedAddress ?? condenseAddress(address)}
+            <button onClick={copyAddressToClipboard} className="bg-none border-none cursor-pointer ml-1.5">
               <FontAwesomeIcon icon={faClone} />
             </button>
           </p>
+          <a href={links[2]} className="text-xs font-normal">
+            by {by}
+          </a>
         </div>
-      </header >
-      <div className="mb-[0.35rem] gap-[3px] w-full inline-flex items-center justify-between">
-        <p className='text-xs text-foreground font-normal'><FontAwesomeIcon icon={faHourglassHalf} fontSize={12} className="text-foreground"/> {timePassed}</p>
-        <p className="text-xs text-foreground font-normal">V{volume} MC{marketCap}</p>
-      </div>
-      <div className="flex items-center justify-between">
-        <div>
-          <span className="text-xs text-primary mr-[3px]">{usersAmount}<FontAwesomeIcon icon={faUsers} fontSize={12} className="ml-[3px]"/> </span>
-          {socials?.map(({ type, url }, index) => (
-            <a
-              key={index}
-              href={url}
-            >
-              {getSocialIcons(type)}
+        <div className="flex items-center justify-between grow">
+          <div className="flex items-center gap-1">
+            <p className='text-xs text-foreground font-normal flex items-center'><FontAwesomeIcon icon={faHourglassHalf} fontSize={12} className="text-foreground mr-[3px]" /> {timePassed}</p>
+            {socials?.map(({ type, url }, index) => (
+              <a
+                key={index}
+                href={url}
+              >
+                {getSocialIcons(type)}
+              </a>
+            ))}
+            <a className="bg-none inline border-none text-xs" href={chartLink}>
+              <ChartArea size={16} color="var(--primary)" />
             </a>
-          ))}
-        </div>
-        <div className="flex justify-end items-center gap-4">
-          <a className="bg-none border-none text-xs inline-flex items-center cursor-pointer" href={`https://t.me/MaestroSniperBot?start=${address}-frankgumbou`}>
-            Buy <CircleDollarSign size={16} color="var(--primary)" />
-          </a>
-          <a className="bg-none border-none text-xs inline-flex items-center cursor-pointer" href={chartLink}>
-            Chart <ChartArea size={16} color="var(--primary)" />
-          </a>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild><p className="text-xs font-normal flex items-center"><Goal size={12} className="ml-[3px]" /> {multiplierAmount} </p></TooltipTrigger>
-              <TooltipContent>
-                <p className="text-black">Sorted by median ATH X at least 4 calls or more</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          </div>
+          <div className="mb-[0.35rem] gap-[3px] w-full inline-flex items-center justify-end">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild><p className="text-xs font-normal flex items-center"><Goal size={12} className="ml-[3px]" /> {multiplierAmount} </p></TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-black">Sorted by median ATH X at least 4 calls or more</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <p className="text-xs text-foreground font-normal">V{volume} MC{marketCap}</p>
+          </div>
         </div>
       </div>
-      <ReactQueryDevtools initialIsOpen />
-    </div >
+    </div>
   );
 }

@@ -41,7 +41,7 @@ export default function Dashboard() {
   const [selectedLists, setSelectedLists] = useState({
     1: {index: 0, name: "Trending Tokens"},
     2: {index: 1, name: "Latest Calls"},
-    3: {index: 2, name: "Best Callers of Last Month"}
+    3: {index: 6, name: "Best Calls of Last Month"}
   });
 
   const { status, data, error } = useQuery({
@@ -64,8 +64,8 @@ export default function Dashboard() {
   if (status === 'error') return <span>Error: {error.message}</span>;
 
   return (
-    <section>
-      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-[0.55rem] mt-8">
+    <section className='w-full'>
+      <div className="w-full px-2 grid grid-cols-1 lg:grid-cols-3 gap-3">
         <DashboardSelect 
           options={dashboardOptions} 
           row={1} 
@@ -88,8 +88,8 @@ export default function Dashboard() {
           className=" hidden lg:flex"
         />
 
-        <ScrollArea>
-          <div className="block max-h-[calc(100vh-10rem)] rounded-lg w-full mx-2">
+        <ScrollArea className="scroll-area">
+          <div className="block max-h-[calc(100vh-10rem)] rounded-lg w-auto mx-2">
             {!data && status === 'pending' && <RowLoading />}
             {data?.[selectedLists[1].index]?.[selectedLists[1].name]?.map((item, index) => (
               <DashboardItemDistibuter
@@ -105,7 +105,7 @@ export default function Dashboard() {
             ))}
           </div>
         </ScrollArea>
-        <ScrollArea className="flex max-h-[calc(100vh-10rem)] rounded-lg hidden lg:block">
+        <ScrollArea className="flex max-h-[calc(100vh-10rem)] rounded-lg w-auto hidden lg:block">
           {!data && status === 'pending' && <RowLoading />}
           {data?.[selectedLists[2].index]?.[selectedLists[2].name]?.map((item, index) => (
             <DashboardItemDistibuter
@@ -120,7 +120,7 @@ export default function Dashboard() {
           />
           ))}
         </ScrollArea>
-        <ScrollArea className="flex max-h-[calc(100vh-10rem)] rounded-lg hidden lg:block">
+        <ScrollArea className="flex max-h-[calc(100vh-10rem)] rounded-lg w-auto hidden lg:block">
           {!data && status === 'pending' && <RowLoading />}
           {data?.[selectedLists[3].index]?.[selectedLists[3].name]?.map((item, index) => (
             <DashboardItemDistibuter

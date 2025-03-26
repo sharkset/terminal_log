@@ -8,7 +8,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="flex justify-between border-b border-[#212530] px-8 py-4 fixed w-full z-10 bg-black hidden md:flex">
+      <header className="flex justify-between border-b border-secondary px-8 py-4 fixed w-full z-10 bg-background hidden md:flex">
         <nav className="flex justify-center items-center gap-8">
           <div className="text-primary font-bold">
             <Image src="/logo.png" width={75} height={40} alt=""/>
