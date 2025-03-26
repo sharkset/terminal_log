@@ -2,7 +2,6 @@
 
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query'
-//import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ChartArea, CircleDollarSign, Phone, PhoneCall } from 'lucide-react';
 import { toast } from "sonner"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'

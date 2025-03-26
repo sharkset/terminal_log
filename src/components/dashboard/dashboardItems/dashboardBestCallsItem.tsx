@@ -2,7 +2,6 @@
 
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query'
-//import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { formatDistanceStrict } from 'date-fns';
 import { TZDate } from '@date-fns/tz';
 import { ChartArea, CircleDollarSign, Goal } from 'lucide-react';
@@ -19,7 +18,6 @@ import {
 } from "@/components/ui/tooltip"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-//import { Skeleton } from '@/components/ui/skeleton';
 
 
 interface DashboardItemProps {
