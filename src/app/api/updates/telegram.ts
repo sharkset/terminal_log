@@ -76,23 +76,23 @@ function generateFakeLogs() {
     ];
 
     function generateRandomLogMessage() {
-        const actions = ["Initializing", "Processing", "Validating", "Executing", "Scanning", "Updating", "Loading", "Checking", "Retrieving", "Connecting"];
+        const actions = ["Initializing", "Processing", "Validating", "Executing", "Scanning", "Updating", "Loading", "Checking", "Retrieving", "Connecting", "Eliminating", "Analyzing", "Optimizing", "Monitoring", "Archiving", "Creating", "Deleting", "Modifying", "Recovering", "Rebooting", "Reconfiguring", "Rebuilding", "Releasing", "Deploying", "Testing", "Debugging", "Compiling", "Encrypting", "Decrypting", "Authenticating", "Authorizing", "Verifying", "Validating", "Resolving", "Handling", "Escalating", "Escaping", "Blocking", "Unblocking", "Filtering", "Crawling", "Scanning", "Detecting", "Identifying", "Classifying", "Categorizing", "Grouping", "Sorting", "Filtering", "Searching", "Indexing", "Archiving", "Compressing", "Decompressing", "Encrypting", "Decrypting", "Signing", "Verifying", "Validating", "Authenticating", "Authorizing", "Hashing", "Salting", "Peppering", "Encoding", "Decoding", "Parsing", "Serializing", "Deserializing", "Transforming", "Transcoding", "Converting", "Normalizing", "Denormalizing", "Standardizing", "Canonicalizing", "Optimizing", "Minifying", "Obfuscating", "Deobfuscating", "Compiling", "Decompiling", "Interpreting", "Executing", "Running", "Stopping", "Pausing", "Resuming", "Restarting", "Shutting down", "Booting up", "Waking up", "Sleeping", "Hibernating", "Suspending", "Resuming", "Recovering", "Rebooting", "Reconfiguring", "Rebuilding", "Releasing", "Deploying", "Testing", "Debugging", "Compiling", "Encrypting", "Decrypting", "Authenticating", "Authorizing", "Verifying", "Validating", "Resolving", "Handling", "Escalating", "Escaping", "Blocking", "Unblocking", "Filtering", "Crawling", "Scanning", "Detecting", "Identifying", "Classifying", "Categorizing", "Grouping", "Sorting", "Filtering", "Searching", "Indexing", "Archiving", "Compressing", "Decompressing"];
         const subjects = ["database", "network", "user session", "API request", "security module", "disk storage", "configuration", "authentication", "logs", "server instance"];
         const results = ["completed successfully.", "encountered an issue!", "is taking longer than expected.", "requires manual intervention.", "was interrupted.", "is now online.", "failed to respond.", "is running optimally.", "detected an anomaly.", "needs a restart.",
-            /*  "Scanning brand new tokens on $SOL",
-             "Scanning brand new tokens on $ETH",
-             "Scanning brand new tokens on $BASE",
-             "Scanning brand new tokens on $TON",
-             "Scanning brand new tokens on $TON",
-             "Creating patterns for low-performance tokens",
-             "Eliminating patterns for low-performance tokens (2x-)",
-             "Creating patterns for medium-performance tokens (2x+)",
-             "Creating patterns for high-performance tokens (10x+)",
-             "Updating machine learning filters for Seekai Research",
-             "Updating machine learning filters for Seekai Gamble",
-             "New user clicked on the @defaicreator bot",
-             "New DEFAI agent created by a user, monitoring filters patterns and performance",
-             "New filter created by a user reached medium-performance token metrics, archiving filter for machine learning training",
+             "brand new tokens on $SOL",
+             "brand new tokens on $ETH",
+             "brand new tokens on $BASE",
+             "brand new tokens on $TON",
+             "brand new tokens on $TON",
+             "patterns for low-performance tokens",
+             "patterns for low-performance tokens (2x-)",
+             "patterns for medium-performance tokens (2x+)",
+             "patterns for high-performance tokens (10x+)",
+             "machine learning filters for Seekai Research",
+             "machine learning filters for Seekai Gamble",
+             "user clicked on the @defaicreator bot",
+             "DEFAI agent created by a user, monitoring filters patterns and performance",
+             "filter created by a user reached medium-performance token metrics, archiving filter for machine learning training",
              "DEFAI agent created by user is only monitoring new token pairs",
              "DEFAI agent created by user is now monitoring brand-new tokens only",
              "DEFAI agent created by user is now monitoring brand-new tokens + called tokens only",
@@ -105,8 +105,8 @@ function generateFakeLogs() {
              "DEFAI agent created by user now ignores $TON network",
              "DEFAI agent created by user now ignores $ETH network",
              "DEFAI agent created by user now ignores $BASE network",
-             "Creating a new bundle of Telegram channels to monitor",
-             "Creating a new bundle of Telegram channels to monitor (finding $TICKER + CA)" */
+             "a new bundle of Telegram channels to monitor",
+             "a new bundle of Telegram channels to monitor (finding $TICKER + CA)"
         ];
 
         return `${getRandomElement(actions)} ${getRandomElement(subjects)} ${getRandomElement(results)}`;

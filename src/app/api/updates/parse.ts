@@ -186,7 +186,7 @@ export async function parseDefaiCreatorMessage(
     text: string,
     entities: Api.TypeMessageEntity[] | undefined
 ): Promise<Record<string, SectionItem[]>> {
-    console.log("Texto de entrada:", text); // Log do texto original
+    console.log("Texto de entrada:", text);
     const lines = text.split("\n");
     const lineRanges: Array<{ start: number; end: number }> = [];
     let currentOffset = 0;
@@ -232,6 +232,11 @@ export async function parseDefaiCreatorMessage(
         "Best Callers of Last Week",
         "Best Callers of Last 24 Hours"
     ];
+    // Seções onde cada item é uma linha única, sem line2
+    const singleLineSections = [
+        "Latest Calls",
+        "Trending Tokens"
+    ];
     const titleRegex = new RegExp(knownTitles.map((t) => `(${escapeRegex(t)})`).join("|"), "i");
     const rankRegex = /^\d+\.\s+/;
     const ignorePatterns = [
@@ -245,6 +250,7 @@ export async function parseDefaiCreatorMessage(
     const result: Record<string, SectionItem[]> = {};
     let currentTitle = "";
     let i = 0;
+    let itemCount = 0;
 
     while (i < linesData.length) {
         const { text: currentLine, links: currentLinks } = linesData[i];
@@ -260,6 +266,7 @@ export async function parseDefaiCreatorMessage(
         if (matchTitle) {
             currentTitle = matchTitle[0].trim();
             result[currentTitle] = [];
+            itemCount = 0;
             console.log(`Novo título encontrado: ${currentTitle}`);
             i++;
             continue;
@@ -273,8 +280,8 @@ export async function parseDefaiCreatorMessage(
             let line2 = "";
             let combinedLinks = [...currentLinks];
 
-            // Para "Latest Calls", não combinamos line2, pois cada item é uma linha única
-            if (currentTitle !== "Latest Calls") {
+            // Só tentamos combinar line2 para seções que não estão em singleLineSections
+            if (!singleLineSections.includes(currentTitle)) {
                 const nextIndex = i + 1;
                 if (nextIndex < linesData.length) {
                     const nextLine = linesData[nextIndex];
@@ -347,9 +354,14 @@ export async function parseDefaiCreatorMessage(
             }
 
             result[currentTitle].push(item);
-            console.log(`Item adicionado à "${currentTitle}":`, item);
+            itemCount++;
+            console.log(`Item ${itemCount} adicionado à "${currentTitle}":`, item);
         }
         i++;
+    }
+
+    for (const title in result) {
+        console.log(`Seção "${title}" tem ${result[title].length} itens.`);
     }
 
     return result;
