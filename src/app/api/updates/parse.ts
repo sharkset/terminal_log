@@ -186,6 +186,7 @@ export async function parseDefaiCreatorMessage(
     text: string,
     entities: Api.TypeMessageEntity[] | undefined
 ): Promise<Record<string, SectionItem[]>> {
+    console.log("Texto de entrada:", text);
     const lines = text.split("\n");
     const lineRanges: Array<{ start: number; end: number }> = [];
     let currentOffset = 0;
@@ -197,7 +198,6 @@ export async function parseDefaiCreatorMessage(
     }
 
     const linesData = lines.map((l) => ({ text: l, links: [] as string[] }));
-
     if (entities) {
         for (const entity of entities) {
             if (entity.className === "MessageEntityTextUrl" && "url" in entity) {
@@ -216,19 +216,28 @@ export async function parseDefaiCreatorMessage(
     }
 
     const knownTitles = [
+        "Latest Calls",
+        "Trending Tokens",
         "Best Calls of Last 24 Hours",
         "Best Calls of Last Week",
         "Best Calls of Last Month",
         "Best Callers of Last 24 Hours",
         "Best Callers of Last Week",
-        "Best Callers of Last Month",
-        "Latest Calls",
-        "Trending Tokens",
+        "Best Callers of Last Month"
     ];
-    const titleRegex = new RegExp(
-        knownTitles.map((t) => `(${escapeRegex(t)})`).join("|"),
-        "i"
-    );
+    const sectionsWithChannelInfo = [
+        "Best Calls of Last Month",
+        "Latest Calls",
+        "Best Callers of Last Month",
+        "Best Callers of Last Week",
+        "Best Callers of Last 24 Hours"
+    ];
+    // Seções onde cada item é uma linha única, sem line2
+    const singleLineSections = [
+        "Latest Calls",
+        "Trending Tokens"
+    ];
+    const titleRegex = new RegExp(knownTitles.map((t) => `(${escapeRegex(t)})`).join("|"), "i");
     const rankRegex = /^\d+\.\s+/;
     const ignorePatterns = [
         "[📞 Unique Calls in Last 24 Hours]",
@@ -241,10 +250,14 @@ export async function parseDefaiCreatorMessage(
     const result: Record<string, SectionItem[]> = {};
     let currentTitle = "";
     let i = 0;
+    let itemCount = 0;
+
     while (i < linesData.length) {
         const { text: currentLine, links: currentLinks } = linesData[i];
+        console.log(`Linha ${i}: "${currentLine}"`);
 
         if (!currentLine.trim() || ignorePatterns.some((pattern) => currentLine.includes(pattern))) {
+            console.log(`Ignorando linha ${i}: "${currentLine}"`);
             i++;
             continue;
         }
@@ -253,26 +266,33 @@ export async function parseDefaiCreatorMessage(
         if (matchTitle) {
             currentTitle = matchTitle[0].trim();
             result[currentTitle] = [];
+            itemCount = 0;
+            console.log(`Novo título encontrado: ${currentTitle}`);
             i++;
             continue;
         }
 
         if (currentTitle) {
+            console.log(`Processando item na seção "${currentTitle}"`);
             let item: SectionItem;
             // eslint-disable-next-line prefer-const
             let line1 = currentLine;
             let line2 = "";
             let combinedLinks = [...currentLinks];
 
-            const nextIndex = i + 1;
-            if (nextIndex < linesData.length) {
-                const nextLine = linesData[nextIndex];
-                const isNextLineRank = rankRegex.test(nextLine.text);
-                const isNextLineTitle = titleRegex.test(nextLine.text);
-                if (!isNextLineRank && !isNextLineTitle && nextLine.text.trim() !== "") {
-                    line2 = nextLine.text;
-                    combinedLinks = [...combinedLinks, ...nextLine.links];
-                    i++;
+            // Só tentamos combinar line2 para seções que não estão em singleLineSections
+            if (!singleLineSections.includes(currentTitle)) {
+                const nextIndex = i + 1;
+                if (nextIndex < linesData.length) {
+                    const nextLine = linesData[nextIndex];
+                    const isNextLineRank = rankRegex.test(nextLine.text);
+                    const isNextLineTitle = titleRegex.test(nextLine.text);
+                    if (!isNextLineRank && !isNextLineTitle && nextLine.text.trim() !== "") {
+                        line2 = nextLine.text;
+                        combinedLinks = [...combinedLinks, ...nextLine.links];
+                        console.log(`Adicionando line2: "${line2}"`);
+                        i++;
+                    }
                 }
             }
 
@@ -301,7 +321,7 @@ export async function parseDefaiCreatorMessage(
             });
 
             let line3;
-            if (channelOrGroupLink && identifier) {
+            if (sectionsWithChannelInfo.includes(currentTitle) && channelOrGroupLink && identifier) {
                 if (channelInfoCache.has(identifier)) {
                     line3 = channelInfoCache.get(identifier);
                 } else {
@@ -320,29 +340,28 @@ export async function parseDefaiCreatorMessage(
 
             if (rankRegex.test(line1)) {
                 item = { line1, line2, links: combinedLinks };
-                if (line3) {
-                    (item as SectionItemRank).line3 = {
-                        title: line3.title || "N/A",
-                        username: line3.username || "N/A",
-                        photo: line3.photo || "N/A",
-                        members: line3.members ?? 0,
-                    };
-                }
             } else {
                 item = { line: line1, links: combinedLinks };
-                if (line3) {
-                    (item as unknown as SectionItemRank).line3 = {
-                        title: line3.title || "N/A",
-                        username: line3.username || "N/A",
-                        photo: line3.photo || "N/A",
-                        members: line3.members ?? 0,
-                    };
-                }
+            }
+
+            if (line3) {
+                (item as SectionItemRank).line3 = {
+                    title: line3.title || "N/A",
+                    username: line3.username || "N/A",
+                    photo: line3.photo || "N/A",
+                    members: line3.members ?? 0,
+                };
             }
 
             result[currentTitle].push(item);
+            itemCount++;
+            console.log(`Item ${itemCount} adicionado à "${currentTitle}":`, item);
         }
         i++;
+    }
+
+    for (const title in result) {
+        console.log(`Seção "${title}" tem ${result[title].length} itens.`);
     }
 
     return result;

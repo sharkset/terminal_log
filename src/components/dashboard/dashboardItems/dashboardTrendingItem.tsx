@@ -2,7 +2,6 @@
 
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { ChartArea, CircleDollarSign, Phone, PhoneCall } from 'lucide-react';
 import { toast } from "sonner"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -96,6 +95,7 @@ const getSocialIcons = (type: string) => {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function DashboardTrendingItem({ line, links, position }: DashboardItemProps) {
 
   const address = links[0].match(addressRegex)?.[1];
@@ -105,6 +105,8 @@ export default function DashboardTrendingItem({ line, links, position }: Dashboa
   const { status, data, error } = useQuery({
     queryKey: ['tokenInfo', address],
     queryFn: async (): Promise<DescreenerTokenIfo> => {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       const response = await axios.get(`/api/getTokenInfo?address=${address}`);
       return await response.data;
     },
@@ -145,7 +147,7 @@ export default function DashboardTrendingItem({ line, links, position }: Dashboa
             {uniqueCallsAmount &&
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger asChild><h4 className="text-xs font-normal ml-[0.35rem]">
+                  <TooltipTrigger asChild><h4 className="text-xs font-normal ml-[0.35rem] text-[#FC6522]">
                     {uniqueCallsAmount}
                   </h4></TooltipTrigger>
                   <TooltipContent>
@@ -155,7 +157,7 @@ export default function DashboardTrendingItem({ line, links, position }: Dashboa
               </TooltipProvider>
             }
           </span>
-          <a className="bg-none border-none text-xs flex items-center justify-end cursor-pointer text-right" href={`https://t.me/MaestroSniperBot?start=${address}-frankgumbou`}>
+          <a className="bg-none border-none text-xs flex items-center justify-end cursor-pointer text-right" title="Buy with Maestro Bot" href={`https://t.me/MaestroSniperBot?start=${address}-frankgumbou`}>
             Buy <CircleDollarSign size={16} color="var(--primary)" />
           </a>
         </div>
@@ -187,7 +189,7 @@ export default function DashboardTrendingItem({ line, links, position }: Dashboa
           <div className="mb-[0.35rem] gap-[3px] w-full inline-flex items-center justify-end">
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger asChild><p className="text-xs text-foreground font-normal flex items-center">
+                <TooltipTrigger asChild><p className="text-xs text-[#02d7fb] font-normal flex items-center">
                   <Phone size={10} className="ml-[3px]" />
                   {callsAmount}
                 </p></TooltipTrigger>

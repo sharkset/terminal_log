@@ -29,5 +29,5 @@ export async function getUsernameFromChatId(chatId: string): Promise<string | nu
   return match ? match.telegram_handle : null;
 }
 
-setInterval(refreshChatsCache, 5 * 60 * 1000); // atualiza a cada 5 minutos
+setInterval(refreshChatsCache, 1 * 60 * 1000); // atualiza a cada 1 minutos
 //

@@ -10,7 +10,7 @@ export const pgPool = new Pool({
         rejectUnauthorized: false
     },
     max: 5,              // número máximo de conexões simultâneas
-    idleTimeoutMillis: 30000, // fecha conexões ociosas após 30s
+    idleTimeoutMillis: 500000, // fecha conexões ociosas após 30s
     connectionTimeoutMillis: 10000 // timeout para nova conexão
 });
 //

@@ -10,6 +10,7 @@ import Header from '../components/header/header';
 import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { Toaster } from "@/components/ui/sonner"
+import Head from "../components/head/head";
 
 const queryClient = new QueryClient()
 
@@ -20,6 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head />
       <body className="bg-background">
         <QueryClientProvider client={queryClient}>
           <DynamicContextProvider

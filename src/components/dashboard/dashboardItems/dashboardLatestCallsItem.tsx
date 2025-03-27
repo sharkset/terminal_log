@@ -56,12 +56,12 @@ export default function DashboardLatestCallsItem({ line, links, line3 }: Dashboa
       <div className="grid grid-rows-3 grow gap-2">
         <div className="flex items-center justify-between grow">
           <span className="inline-flex items-center">
-            <h5 className="text-xs font-bold">{name}</h5>
+            <h5 className="text-xs font-bold">${name}</h5>
           </span>
           <p className="text-xs"><FontAwesomeIcon icon={faUsers} fontSize={12} className="ml-[3px] text-primary"/> {usersAmount}</p>
         </div>
-        <div className="flex items-center justify-between grow">
-          <a href={links[0]} className="text-xs font-normal">
+        <div className="flex items-center justify-between grow text-[#04C6E7]">
+          <a target="_blank" href={links[0]} className="text-xs font-normal">
             by {by}
           </a>
         </div>
