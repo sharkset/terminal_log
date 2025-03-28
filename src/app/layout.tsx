@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import "./globals.css";
+import './globals.css';
 
 import {
   QueryClient,
   QueryClientProvider,
-} from '@tanstack/react-query'
+} from '@tanstack/react-query';
 import Header from '../components/header/header';
-import { SolanaWalletConnectors } from "@dynamic-labs/solana";
-import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
-import { Toaster } from "@/components/ui/sonner"
-import Head from "../components/head/head";
+import { SolanaWalletConnectors } from '@dynamic-labs/solana';
+import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
+import { Toaster } from '@/components/ui/sonner';
+import Head from '../components/head/head';
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
-export default function RootLayout({
+export default function RootLayout ({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -26,7 +26,7 @@ export default function RootLayout({
         <QueryClientProvider client={queryClient}>
           <DynamicContextProvider
             settings={{
-              environmentId: process.env.DYNAMIC_ID ?? "",
+              environmentId: process.env.DYNAMIC_ID ?? '',
               walletConnectors: [SolanaWalletConnectors],
             }}
           >

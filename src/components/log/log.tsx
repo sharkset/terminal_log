@@ -1,13 +1,17 @@
-"use client";
+'use client';
 
-import { useQuery } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { useQuery } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { Skeleton } from '../ui/skeleton';
 
-export default function Log() {
-  const intervalMs = 1000;
+const timeRegex = /^\[(\d{2}:\d{2}:\d{2})\]/;
+const themeRegex = /\[([A-Z]+)\]/;
+const textRegex = /\[\w+\] (.+)$/;
+const intervalMs = 1000;
+
+export default function Log () {
   const lastItemRef = useRef<HTMLLIElement>(null);
   const [isAtBottom, setIsAtBottom] = useState(true);
 
@@ -24,7 +28,7 @@ export default function Log() {
     const scrollTop = window.scrollY;
     const windowHeight = window.innerHeight;
     const bodyHeight = document.body.offsetHeight;
-    const offset = 10; // Adjust this value if necessary
+    const offset = 10;
 
     if (windowHeight + scrollTop >= bodyHeight - offset) {
       setIsAtBottom(true);
@@ -40,7 +44,7 @@ export default function Log() {
 
   useEffect(() => {
     if (isAtBottom && lastItemRef.current) {
-      lastItemRef.current.scrollIntoView({ behavior: 'smooth' });
+      lastItemRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
   }, [data, isAtBottom]);
 
@@ -54,31 +58,27 @@ export default function Log() {
     </ul>
   );
 
-  if (status === 'error') return <span>Error: {error.message}</span>;
-
-  const timeRegex = /^\[(\d{2}:\d{2}:\d{2})\]/;
-  const themeRegex = /\[([A-Z]+)\]/;
-  const textRegex = /\[\w+\] (.+)$/;
+  if (status === 'error') return <span>Error: {error.message || 'An unknown error occurred'}</span>;
 
   return (
     <div>
       <ul className="w-screen max-w-[1455px] p-4">
         {data.map((item: string, index: number) => (
-          item.length === index ?
-            <li key={index} className="list-none py-[0.35rem] opacity-70 hover:opacity-100">
-              <p className="text-foreground text-base">
-                <span className="text-primary mr-[0.35rem]">[{item.match(timeRegex)?.[1] ?? ""}]</span>
-                <span className="text-primary mr-[0.35rem]">[{item.match(themeRegex)?.[1] ?? ""}]</span>
-                {item.match(textRegex)?.[1] ?? ""}
-              </p>
-            </li> :
-            <li key={index} className="list-none py-[0.35rem] opacity-70 hover:opacity-100" ref={lastItemRef}>
-              <p className="text-foreground text-base">
-                <span className="text-primary mr-[0.35rem]">[{item.match(timeRegex)?.[1] ?? ""}]</span>
-                <span className="text-primary mr-[0.35rem]">[{item.match(themeRegex)?.[1] ?? ""}]</span>
-                {item.match(textRegex)?.[1] ?? ""}
-              </p>
-            </li>
+          <li 
+            key={index} 
+            className="list-none py-[0.35rem] opacity-70 hover:opacity-100" 
+            ref={index === data.length - 1 ? lastItemRef : undefined}
+          >
+            <p className="text-foreground text-base">
+              <span className="text-primary mr-[0.35rem]">
+                [{item.match(timeRegex)?.[1] ?? ''}]
+              </span>
+              <span className="text-primary mr-[0.35rem]">
+                [{item.match(themeRegex)?.[1] ?? ''}]
+              </span>
+              {item.match(textRegex)?.[1] ?? ''}
+            </p>
+          </li>
         ))}
       </ul>
       <ReactQueryDevtools initialIsOpen />

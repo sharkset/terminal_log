@@ -1,12 +1,12 @@
-import { DynamicWidget, useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { DynamicWidget, useDynamicContext } from '@dynamic-labs/sdk-react-core';
 interface ConnectButton {
   className?: string
 }
 
-export default function ConnectButton({className}: ConnectButton) {
+export default function ConnectButton ({className}: ConnectButton) {
   const { setShowAuthFlow, primaryWallet } = useDynamicContext();
 
-  function condenseAddress(address: string | undefined) {
+  function condenseAddress (address: string | undefined) {
     if (!address) {
       return null;
     }
@@ -16,14 +16,20 @@ export default function ConnectButton({className}: ConnectButton) {
     return `${firstPart}...${lastPart}`;
   }
 
-  const condensedPrimaryWallet = condenseAddress(primaryWallet?.address)
+  const condensedPrimaryWallet = condenseAddress(primaryWallet?.address);
 
   return (
     <>
-      <button className={`text-primary bg-transparent cursor-pointer ${className ?? ""}`} type="button" onClick={() => setShowAuthFlow(true)}>
+      <button 
+        className={
+          `text-primary bg-transparent cursor-pointer ${className ?? ''}`
+        } 
+        type="button" 
+        onClick={() => setShowAuthFlow(true)}
+      >
         {condensedPrimaryWallet ?? 'CONNECT'}
       </button>
       <div className="hidden"><DynamicWidget/></div>
     </>
-  )
+  );
 }

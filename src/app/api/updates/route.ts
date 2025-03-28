@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
-import { logs } from "./telegram";
+import { api } from '@/lib/axios';
+import { NextResponse } from 'next/server';
 
-export async function GET() {
-      try {
-          return NextResponse.json(logs)
-      } catch (error) {
-          NextResponse.error();
-          console.error('Failed to start API', error);
-      }
-} 
-//
+export async function GET () {
+  try {
+    const response = await api.get('/getLogs');
+    return NextResponse.json(response.data.logs);
+  } catch (error) {
+    NextResponse.error();
+    console.error('Failed to start API', error);
+  }
+}

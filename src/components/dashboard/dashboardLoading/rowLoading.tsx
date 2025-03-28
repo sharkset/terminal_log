@@ -1,10 +1,13 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default function RowLoading() {
+export default function RowLoading () {
   return (
     <>
       {Array.from({ length: 8 }).map((_, index) => (
-        <div className="bg-secondary border-t border-[hsl(224,19%,16%)] px-8 py-4" key={index}>
+        <div 
+          className="bg-secondary border-t border-[hsl(224,19%,16%)] px-8 py-4" 
+          key={index}
+        >
           <header className="flex items-center gap-2 m-2">
             <Skeleton className="h-8 w-8 rounded-full" />
             <div className="w-full">
@@ -20,5 +23,5 @@ export default function RowLoading() {
         </div>
       ))}
     </>
-  )
+  );
 }
