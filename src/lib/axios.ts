@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: 'https://defaicreatorbackend-production.up.railway.app/v1/',
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 1000,
 });

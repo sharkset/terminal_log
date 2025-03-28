@@ -22,22 +22,22 @@ interface DashboardItemProps {
   position: number;
 }
 
+const nameRegex = /\d+\.\s*(.*?)\s*\|/;
+const multiplierRegex = /🎯\s*([\d.]+x)/;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export default function DashboardBestCallersItem ({ 
   line,
   links, 
   line3, 
   position, 
 }: DashboardItemProps) {
-  const nameRegex = /\d+\.\s*(.*?)\s*\|/;
-  const multiplierRegex = /🎯\s*([\d.]+x)/;
 
   const name = line.match(nameRegex)?.[1] || 'Unknown';
   const initials = name.slice(0, 2).toUpperCase();
   const multiplierAmount = line.match(multiplierRegex)?.[1] || 'N/A';
   const link = links[0] || '#';
-  const avatarUrl = line3?.photo
-    ? `https://defaicreatorbackend-production.up.railway.app/v1/public/uploads/${line3.photo}`
-    : '/avatar.jpg';
+  const avatarUrl = `${apiUrl}/public/uploads/${line3.photo}`;
 
   return (
     <div className="

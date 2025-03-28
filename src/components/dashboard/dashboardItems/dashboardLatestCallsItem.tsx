@@ -41,6 +41,7 @@ const getTimeFromNow = (time: string | undefined): string | null => {
 const nameRegex = /\$(\w+)/;
 const byRegex = /by\s+(.*)/;
 const timeRegex = /⏳(\d{2}:\d{2}:\d{2})/;
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function DashboardLatestCallsItem ({ 
   line, 
@@ -54,7 +55,7 @@ export default function DashboardLatestCallsItem ({
   const callTime = line.match(timeRegex)?.[1];
   const timePassed = getTimeFromNow(callTime) || 'N/A';
   const usersAmount = line3?.members || '--';
-  const avatarUrl = `https://defaicreatorbackend-production.up.railway.app/v1/public/uploads/${line3.photo}`;
+  const avatarUrl = `${apiUrl}/public/uploads/${line3.photo}`;
 
   return (
     <div className="

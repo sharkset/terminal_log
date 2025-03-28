@@ -102,7 +102,7 @@ export default function DashboardTrendingItem ({
   const volume = condenseBigValues(data?.volume?.h24);
   const marketCap = condenseBigValues(data?.marketCap);
   const chartLink = data?.url || '#';
-  const avatarUrl = data?.info?.imageUrl || '/avatar.jpg';
+  const avatarUrl = data?.info?.imageUrl;
 
   const copyAddressToClipboard = () => {
     navigator.clipboard.writeText(completeAddress || '')

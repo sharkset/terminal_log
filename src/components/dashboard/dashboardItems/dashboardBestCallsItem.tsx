@@ -88,6 +88,7 @@ const volumeRegex = /🔝\s*(\$\d+(\.\d+)?[kmb]?)/i;
 const timeRegex = /⏳\s*([\d/:\s]+)/;
 const symbolRegex = /\$(\w+)/;
 const multiplierRegex = /🎯(\d+x)/; 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function DashboardBestCalls ({ 
   line1, 
@@ -102,7 +103,7 @@ export default function DashboardBestCalls ({
   const by = line3.title || 'Unknown';
   const address = links[0]?.match(addressRegex)?.[1] || 'Unknown';
   const condensedAddress = condenseAddress(address);
-  const avatarUrl = `https://defaicreatorbackend-production.up.railway.app/v1/public/uploads/${line3.photo}`;
+  const avatarUrl = `${apiUrl}/public/uploads/${line3.photo}`;
   const chartLink = links[0] || '#';
   const marketCap = line2.match(marketcapRegex)?.[1] || '--';
   const volume = line2.match(volumeRegex)?.[1] || '--';
