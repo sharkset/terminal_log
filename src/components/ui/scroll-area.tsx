@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 'use client';
 
 import * as React from 'react';
@@ -35,7 +36,7 @@ function ScrollBar ({
   ...props
 }: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
   return (
-    <ScrollAreaPrimitive.ScrollAreaScrollbar
+    <ScrollAreaPrimitive.ScrollAreaScrollbar 
       data-slot="scroll-area-scrollbar"
       orientation={orientation}
       className={cn(

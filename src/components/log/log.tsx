@@ -58,7 +58,6 @@ export default function Log () {
     </ul>
   );
 
-  // eslint-disable-next-line max-len
   if (status === 'error') return <span>Error: {error.message || 'An unknown error occurred'}</span>;
 
   return (
