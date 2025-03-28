@@ -7,8 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "bot": "nodemon ./src/app/api/updates/telegram.ts",
-    "vercel-build": "npm install --legacy-peer-deps && next build"
+    "bot": "nodemon ./src/app/api/updates/telegram.ts"
   },
   "dependencies": {
     "@date-fns/tz": "^1.2.0",
