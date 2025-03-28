@@ -2,7 +2,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { DashboardItemType } from '../dashboard';
 import DashboardSelect from '../dashboardSelect/dashboardSelect';
 import RowLoading from '../dashboardLoading/rowLoading';
-// eslint-disable-next-line max-len
 import DashboardItemDistibuter from '../dashboardItems/dashboardItemsDistributer';
 
 interface DashboardRowProps {
