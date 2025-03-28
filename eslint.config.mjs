@@ -19,7 +19,7 @@ const eslintConfig = [
       'indent': ['error', 2], // Define indentação de 2 espaços
       'space-before-function-paren': ['error', 'always'], // Espaço antes do parênteses em funções
       'no-multiple-empty-lines': ['error', { 'max': 1 }], // Evita múltiplas linhas vazias
-      'max-len': ['error', { 'code': 80, 'ignoreUrls': true, 'ignorePattern': '<\\s*(link|meta|title)\\b[^>]*>' }], // Ignora imports e tags HTML de header
+      'max-len': ['error', { 'code': 80, 'ignoreUrls': true, 'ignorePattern': '^import\\s.+\\sfrom\\s.+;$|<\\s*(link|meta|title)\\b[^>]*>' }], // Ignora imports e tags HTML de header
       'quotes': ['error', 'single'], // Usa sempre aspas simples
     },
   },
