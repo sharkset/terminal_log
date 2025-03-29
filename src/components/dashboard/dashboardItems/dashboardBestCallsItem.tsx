@@ -5,7 +5,6 @@ import { TZDate } from '@date-fns/tz';
 import { ChartArea, CircleDollarSign, Goal } from 'lucide-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'sonner';
-
 import { faClone, faHourglassHalf } from '@fortawesome/free-regular-svg-icons';
 import {
   Tooltip,
@@ -15,14 +14,18 @@ import {
 } from '@/components/ui/tooltip';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { DescreenerTokenIfo } from '../dashboard';
 interface DashboardItemProps {
   line1: string
   line2: string,
-  line3: {
+  line3?: {
     title: string,
     username: string,
     photo: string,
     members: number
+  }
+  line4: {
+    pairs: DescreenerTokenIfo[]
   }
   links: string[]
 }
@@ -52,11 +55,11 @@ const getTimeFromNow = (time: string | undefined): string | null => {
   const fullYear = year < 100 ? 2000 + year : year;
 
   const extractedDate = new Date(
-    fullYear, 
-    month - 1, 
-    day, 
-    hours, 
-    minutes, 
+    fullYear,
+    month - 1,
+    day,
+    hours,
+    minutes,
     seconds,
   );
   const timeFromNow = formatDistanceStrict(now, extractedDate);
@@ -86,31 +89,35 @@ const addressRegex = /\/([^\/]+)$/;
 const marketcapRegex = /📞\s*(\$\d+(\.\d+)?[kmb]?)/i;
 const volumeRegex = /🔝\s*(\$\d+(\.\d+)?[kmb]?)/i;
 const timeRegex = /⏳\s*([\d/:\s]+)/;
-const symbolRegex = /\$(\w+)/;
-const multiplierRegex = /🎯(\d+x)/; 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const multiplierRegex = /🎯(\d+x)/;
 
-export default function DashboardBestCalls ({ 
-  line1, 
-  line2, 
-  line3, 
-  links, 
+export default function DashboardBestCalls ({
+  line1,
+  line2,
+  line3,
+  line4,
+  links,
 }: DashboardItemProps) {
 
-  const name = line3.username || 'Unknown';
-  const initials = name.slice(0, 2).toUpperCase();
-  const symbol = line1.match(symbolRegex)?.[1] || '--';
-  const by = line3.title || 'Unknown';
-  const address = links[0]?.match(addressRegex)?.[1] || 'Unknown';
-  const condensedAddress = condenseAddress(address);
-  const avatarUrl = `${apiUrl}/public/uploads/${line3.photo}`;
-  const chartLink = links[0] || '#';
-  const marketCap = line2.match(marketcapRegex)?.[1] || '--';
+  const data = line4?.pairs?.[0];
+
+  const name = data?.baseToken?.name || 'Unknown';
+  const completeAddress = data?.baseToken?.address;
+  const condensedAddress = condenseAddress(completeAddress);
+  const symbol = data?.baseToken?.symbol || 'N/A';
+  const initials = symbol.slice(0, 2).toUpperCase();
   const volume = line2.match(volumeRegex)?.[1] || '--';
+  const marketCap = line2.match(marketcapRegex)?.[1] || '--';
+  const chartLink = links[0] || '#';
+  const avatarUrl = data?.info?.imageUrl;
+
+  const by = line3?.username ?? '--';
+  const address = links[0]?.match(addressRegex)?.[1] || 'Unknown';
+
   const time = line2.match(timeRegex)?.[1];
   const timePassed = getTimeFromNow(time) || '--';
   const multiplierAmount = line1.match(multiplierRegex)?.[1] || '--';
-  const usersAmount = line3.members || '--';
+  const usersAmount = line3?.members ?? '--';
 
   const copyAddressToClipboard = () => {
     navigator.clipboard.writeText(address || '')
@@ -124,13 +131,13 @@ export default function DashboardBestCalls ({
       p-2 bg-secondary not-first:border-t border-[hsl(224,19%,16%)]"
     >
       <Avatar className="w-[50px] h-[50px]">
-        <AvatarImage 
-          src={avatarUrl} 
-          alt={`${name}'s avatar`} 
-          width={50} 
-          height={50} 
+        <AvatarImage
+          src={avatarUrl}
+          alt={`${name}'s avatar`}
+          width={50}
+          height={50}
         />
-        <AvatarFallback 
+        <AvatarFallback
           className="bg-[url(/avatar.jpg)] text-secondary uppercase"
         >
           {initials}
@@ -138,9 +145,9 @@ export default function DashboardBestCalls ({
       </Avatar>
       <div className="grid grid-rows-3 grow">
         <div className="flex items-center justify-between grow">
-          <a 
-            href={links[1]} 
-            target="_blank" 
+          <a
+            href={links[1]}
+            target="_blank"
             className="inline-flex items-center"
           >
             <h5 className="text-xs font-bold">{name}</h5>
@@ -148,16 +155,16 @@ export default function DashboardBestCalls ({
           </a>
           <span className="text-xs text-primary mr-[3px]">
             {usersAmount}
-            <FontAwesomeIcon 
-              icon={faUsers} 
-              fontSize={12} 
-              className="ml-[3px]" 
+            <FontAwesomeIcon
+              icon={faUsers}
+              fontSize={12}
+              className="ml-[3px]"
             />
           </span>
-          <a 
-            target="_blank" 
-            className="bg-none border-none text-xs f
-            lex items-center justify-end cursor-pointer text-right" 
+          <a
+            target="_blank"
+            className="bg-none border-none text-xs 
+            flex items-center justify-end cursor-pointer text-right"
             href={`https://t.me/MaestroSniperBot?start=${address}-frankgumbou`}
           >
             Buy <CircleDollarSign size={16} color="var(--primary)" />
@@ -166,8 +173,8 @@ export default function DashboardBestCalls ({
         <div className="flex items-center justify-between grow">
           <p className="text-xs font-normal">
             {condensedAddress ?? condenseAddress(address)}
-            <button 
-              onClick={copyAddressToClipboard} 
+            <button
+              onClick={copyAddressToClipboard}
               className="bg-none border-none cursor-pointer ml-1.5"
             >
               <FontAwesomeIcon icon={faClone} />
@@ -182,16 +189,16 @@ export default function DashboardBestCalls ({
             <p className='
               text-xs text-foreground font-normal flex items-center'
             >
-              <FontAwesomeIcon 
-                icon={faHourglassHalf} 
-                fontSize={12} 
+              <FontAwesomeIcon
+                icon={faHourglassHalf}
+                fontSize={12}
                 className="text-foreground mr-[3px]"
-              /> 
+              />
               {timePassed}
             </p>
-            <a 
-              target="_blank" 
-              className="bg-none inline border-none text-xs" 
+            <a
+              target="_blank"
+              className="bg-none inline border-none text-xs"
               href={chartLink}
             >
               <ChartArea size={16} color="var(--primary)" />

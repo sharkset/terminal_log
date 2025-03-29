@@ -59,8 +59,8 @@ export default function DashboardBestCallersItem ({
       </Avatar>
       <div className="grid grid-rows-3 grow gap-2">
         <div className="flex items-center justify-between grow">
-          <p className="text-xs font-bold">
-            Caller <span className="text-primary">#{position}</span>
+          <p className="text-xs font-bold text-primary">
+             #{position}
           </p>
         </div>
         <div className="flex items-center justify-between grow">

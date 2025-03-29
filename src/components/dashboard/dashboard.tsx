@@ -68,9 +68,9 @@ const getSelectedListData = (
 export default function Dashboard () {
   const intervalMs = 1000 * 60;
   const [selectedLists, setSelectedLists] = useState([
-    'Best Callers of Last 24 Hours',
+    'Trending Tokens',
     'Latest Calls',
-    'Best Calls of Last Month',
+    'Best Calls of Last 24 Hours',
   ]);
 
   const { status, data, error } = useQuery({
