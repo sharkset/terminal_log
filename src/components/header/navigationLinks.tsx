@@ -21,6 +21,20 @@ export default function NavigationLinks ({className}: NavigationLinksProps) {
       >
         TERMINAL
       </Link>
+      <Link 
+        href='https://docs.defaicreator.bot/'
+        target='_blank'
+        className={`text-foreground ${className}`}
+      >
+        DOCS
+      </Link>
+      <Link 
+        href='https://t.me/defaicreatorbot?start'
+        target='_blank'
+        className={`text-foreground ${className}`}
+      >
+        CREATE NEW AGENT
+      </Link>
     </>
   );
 }

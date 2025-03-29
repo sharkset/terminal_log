@@ -180,8 +180,8 @@ export default function DashboardBestCalls ({
               <FontAwesomeIcon icon={faClone} />
             </button>
           </p>
-          <a target="_blank" href={links[2]} className="text-xs font-normal">
-            by {by}
+          <a target="_blank" href={links[2]} className="text-xs font-normal ">
+            <b className='text-[#04C6E7]'>by {by}</b>
           </a>
         </div>
         <div className="flex items-center justify-between grow">
