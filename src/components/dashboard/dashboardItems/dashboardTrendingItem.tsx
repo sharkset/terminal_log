@@ -92,7 +92,7 @@ export default function DashboardTrendingItem ({
   const address = links[0]?.match(addressRegex)?.[1] || 'Unknown';
   const callsAmount = line.match(/📞\s*(\d+)\s*\$/)?.[1] || '0';
   const uniqueCallsAmount = getUniqueCalls(line);
-  const data = line4.pairs[0];
+  const data = line4?.pairs?.[0];
   const name = data?.baseToken?.name || 'Unknown';
   const completeAddress = data?.baseToken?.address;
   const condensedAddress = condenseAddress(completeAddress);
