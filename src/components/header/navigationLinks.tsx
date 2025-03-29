@@ -31,9 +31,9 @@ export default function NavigationLinks ({className}: NavigationLinksProps) {
       <Link 
         href='https://t.me/defaicreatorbot?start'
         target='_blank'
-        className={`text-foreground ${className}`}
+        className={`text-foreground ${className} text-[#FDD72D]`}
       >
-        CREATE NEW AGENT
+        CREATE NEW CALLER AGENT
       </Link>
     </>
   );
