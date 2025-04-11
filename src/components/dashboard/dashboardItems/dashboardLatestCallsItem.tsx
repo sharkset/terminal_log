@@ -40,7 +40,8 @@ const getTimeFromNow = (time: string | undefined): string | null => {
 
 const nameRegex = /\$(\w+)/;
 const byRegex = /by\s+(.*)/;
-const timeRegex = /⏳(\d{2}:\d{2}:\d{2})/;
+//const timeRegex = /⏳(\d{2}:\d{2}:\d{2})/;
+const timeRegex = /⏳\s*(\d{2}:\d{2}:\d{2})/;
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function DashboardLatestCallsItem ({ 
