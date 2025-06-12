@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@date-fns/tz": "^1.2.0",
+    "@dynamic-labs/sdk-react-core": "4.9.12",
     "@dynamic-labs/solana": "^4.9.12",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
